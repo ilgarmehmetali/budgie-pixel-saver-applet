@@ -1,0 +1,8 @@
+[Plugin]
+Module=libbudgiepixelsaverapplet.so
+Name=Budgie Pixel Saver
+_Description=Integrates title bar to panel
+Authors=Mehmet Ali İLGAR
+Copyright=Copyright © 2017 Mehmet Ali İLGAR
+Website=https://milgar.net
+Icon=workspace-switcher-symbolic
