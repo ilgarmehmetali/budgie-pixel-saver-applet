@@ -1,10 +1,9 @@
 project(
     'budgie_pixel_saver_applet',
     ['c', 'vala'],
-    version: '10.2.9',
+    version: '1.0.0',
     license: [
-        'GPL-2.0',
-        'LGPL-2.1',
+        'GPL-2.0'
     ],
     default_options: [
         'c_std=c11',
