@@ -90,6 +90,10 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         }
 
         this.activeWindow = this.screen.get_active_window();
+        if(this.activeWindow.get_window_type() != Wnck.WindowType.NORMAL){
+            this.activeWindow = null;
+            this.setTitle("");
+        }
         if(this.activeWindow != null){
             this.activeWindow.name_changed.connect( this.onActiveWindowNameChanged );
             this.activeWindow.state_changed.connect( this.onActiveWindowStateChanged );
