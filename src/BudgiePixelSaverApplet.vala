@@ -42,18 +42,18 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         this.maximizeButton = new Gtk.Button.from_icon_name ("window-maximize-symbolic");
         this.closeButton = new Gtk.Button.from_icon_name ("window-close-symbolic", Gtk.IconSize.BUTTON);
 
-		this.maximizeImage = new Gtk.Image.from_icon_name ("window-restore-symbolic", Gtk.IconSize.BUTTON);
+        this.maximizeImage = new Gtk.Image.from_icon_name ("window-restore-symbolic", Gtk.IconSize.BUTTON);
         this.restoreImage = new Gtk.Image.from_icon_name ("window-maximize-symbolic", Gtk.IconSize.BUTTON);
 
 
-		this.label = new Gtk.Label ("");
-		this.label.set_ellipsize (Pango.EllipsizeMode.END);
+        this.label = new Gtk.Label ("");
+        this.label.set_ellipsize (Pango.EllipsizeMode.END);
         this.label.set_max_width_chars(MAX_TITLE_LENGHT);
         this.label.set_width_chars(MAX_TITLE_LENGHT);
         this.label.set_alignment(0, 0.5f);
 
         Gtk.Box box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        box.pack_start (this.label, true, false, 0);
+        box.pack_start (this.label, false, false, 0);
         box.pack_start (this.minimizeButton, false, false, 0);
         box.pack_start (this.maximizeButton, false, false, 0);
         box.pack_start (this.closeButton, false, false, 0);
@@ -84,7 +84,6 @@ public class BudgiePixelSaverApplet : Budgie.Applet
     }
 
     private void onActiveWindowChanged(Wnck.Window previousWindow){
-        //check if its null
         if(previousWindow != null){
             previousWindow.name_changed.disconnect( this.onActiveWindowNameChanged );
             previousWindow.state_changed.disconnect( this.onActiveWindowStateChanged );
@@ -95,14 +94,16 @@ public class BudgiePixelSaverApplet : Budgie.Applet
             this.activeWindow.name_changed.connect( this.onActiveWindowNameChanged );
             this.activeWindow.state_changed.connect( this.onActiveWindowStateChanged );
             this.setTitle(this.activeWindow.get_name());
-            this.maximizeButton.set_sensitive(true);
-            this.minimizeButton.set_sensitive(true);
-            this.closeButton.set_sensitive(true);
+            this.setButtonStates(true);
         } else {
-            this.maximizeButton.set_sensitive(false);
-            this.minimizeButton.set_sensitive(false);
-            this.closeButton.set_sensitive(false);
+            this.setButtonStates(false);
         }
+    }
+
+    private void setButtonStates(bool isEnabled){
+        this.maximizeButton.set_sensitive(isEnabled);
+        this.minimizeButton.set_sensitive(isEnabled);
+        this.closeButton.set_sensitive(isEnabled);
     }
 
     private void onActiveWindowNameChanged(){
@@ -111,9 +112,9 @@ public class BudgiePixelSaverApplet : Budgie.Applet
 
     private void onActiveWindowStateChanged(Wnck.WindowState changed_mask, Wnck.WindowState new_state){
         if(this.activeWindow.is_maximized()) {
-			this.maximizeButton.image = this.restoreImage;
+            this.maximizeButton.image = this.restoreImage;
         } else {
-			this.maximizeButton.image = this.maximizeImage;
+            this.maximizeButton.image = this.maximizeImage;
         }
     }
 
@@ -131,16 +132,3 @@ public void peas_register_types(TypeModule module)
     var objmodule = module as Peas.ObjectModule;
     objmodule.register_extension_type(typeof(Budgie.Plugin), typeof(BudgiePixelSaverPlugin));
 }
-
-/*
- * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
- *
- * Local variables:
- * c-basic-offset: 4
- * tab-width: 4
- * indent-tabs-mode: nil
- * End:
- *
- * vi: set shiftwidth=4 tabstop=4 expandtab:
- * :indentSize=4:tabSize=4:noTabs=true:
- */
