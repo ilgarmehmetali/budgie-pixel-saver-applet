@@ -79,6 +79,7 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         });
 
         screen.active_window_changed.connect( this.onActiveWindowChanged );
+        screen.window_opened.connect( this.onWindowOpened );
         this.screen.force_update();
         unowned GLib.List<Wnck.Window> windows = this.screen.get_windows();
         foreach(Wnck.Window window in windows){
@@ -123,6 +124,10 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         } else {
             this.setButtonStates(false);
         }
+    }
+
+    private void onWindowOpened(Wnck.Window window){
+        this.hideTitleBarForWindow(window);
     }
 
     private void setButtonStates(bool isEnabled){
