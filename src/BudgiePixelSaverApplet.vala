@@ -120,6 +120,7 @@ public class BudgiePixelSaverApplet : Budgie.Applet
             this.activeWindow.name_changed.connect( this.onActiveWindowNameChanged );
             this.activeWindow.state_changed.connect( this.onActiveWindowStateChanged );
             this.setStates(true, this.activeWindow.get_name());
+            this.setMaximizeRestoreIcon();
         } else {
             this.setStates(false, "");
         }
@@ -141,6 +142,10 @@ public class BudgiePixelSaverApplet : Budgie.Applet
     }
 
     private void onActiveWindowStateChanged(Wnck.WindowState changed_mask, Wnck.WindowState new_state){
+        this.setMaximizeRestoreIcon();
+    }
+
+    private void setMaximizeRestoreIcon(){
         if(this.activeWindow.is_maximized()) {
             this.maximizeButton.image = this.restoreImage;
         } else {
