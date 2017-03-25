@@ -42,8 +42,8 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         this.maximizeButton = new Gtk.Button.from_icon_name ("window-maximize-symbolic");
         this.closeButton = new Gtk.Button.from_icon_name ("window-close-symbolic", Gtk.IconSize.BUTTON);
 
-        this.maximizeImage = new Gtk.Image.from_icon_name ("window-restore-symbolic", Gtk.IconSize.BUTTON);
-        this.restoreImage = new Gtk.Image.from_icon_name ("window-maximize-symbolic", Gtk.IconSize.BUTTON);
+        this.maximizeImage = new Gtk.Image.from_icon_name ("window-maximize-symbolic", Gtk.IconSize.BUTTON);
+        this.restoreImage = new Gtk.Image.from_icon_name ("window-restore-symbolic", Gtk.IconSize.BUTTON);
 
 
         this.label = new Gtk.Label ("");
