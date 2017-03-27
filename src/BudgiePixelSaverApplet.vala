@@ -85,7 +85,7 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         this.screen.active_window_changed.connect( this.on_active_window_changed );
         this.screen.window_opened.connect( this.on_window_opened );
         this.screen.force_update();
-        unowned GLib.List<Wnck.Window> windows = this.screen.get_windows();
+        unowned List<Wnck.Window> windows = this.screen.get_windows();
         foreach(Wnck.Window window in windows){
             if(window.get_window_type() != Wnck.WindowType.NORMAL) continue;
 
@@ -100,13 +100,13 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         string cmd = "xprop -id %#.8x -f _GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED 32c -set _GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED 0x1";
 
         try {
-            GLib.Process.spawn_command_line_async(cmd.printf((uint) window.get_xid()));
+            Process.spawn_command_line_async(cmd.printf((uint) window.get_xid()));
             if(window.is_maximized()) {
                 window.unmaximize();
                 window.maximize();
             }
         } catch(SpawnError e){
-            GLib.error(e.message);
+            error(e.message);
         }
     }
 
