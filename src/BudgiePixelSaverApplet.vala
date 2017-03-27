@@ -42,12 +42,26 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         this.label.set_width_chars(MAX_TITLE_LENGHT);
         this.label.set_alignment(0, 0.5f);
 
+        Gtk.EventBox eventBox = new Gtk.EventBox();
+        eventBox.add(this.label);
+
         Gtk.Box box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        box.pack_start (this.label, false, false, 0);
+        box.pack_start (eventBox, false, false, 0);
         box.pack_start (this.minimizeButton, false, false, 0);
         box.pack_start (this.maximizeButton, false, false, 0);
         box.pack_start (this.closeButton, false, false, 0);
         this.add (box);
+
+
+        eventBox.button_press_event.connect ((event) => {
+            if (event.type == Gdk.EventType.@2BUTTON_PRESS && this.activeWindow != null){
+                if (this.activeWindow.is_maximized())
+                    this.activeWindow.unmaximize();
+                else
+                    this.activeWindow.maximize();
+            }
+            return Gdk.EVENT_PROPAGATE;
+        });
 
         this.minimizeButton.clicked.connect (() => {
             this.activeWindow.minimize();
