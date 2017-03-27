@@ -89,18 +89,27 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         foreach(Wnck.Window window in windows){
             if(window.get_window_type() != Wnck.WindowType.NORMAL) continue;
 
-            this.hide_title_bar_for_window(window);
+            this.toggle_title_bar_for_window(window, false);
         }
         this.on_active_window_changed(this.screen.get_active_window());
         show_all();
 
     }
 
-    private void hide_title_bar_for_window(Wnck.Window window){
-        string cmd = "xprop -id %#.8x -f _GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED 32c -set _GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED 0x1";
+    ~BudgiePixelSaverApplet() {
+        unowned List<Wnck.Window> windows = this.screen.get_windows();
+        foreach(Wnck.Window window in windows){
+            if(window.get_window_type() != Wnck.WindowType.NORMAL) continue;
+
+            this.toggle_title_bar_for_window(window, true);
+        }
+    }
+
+    private void toggle_title_bar_for_window(Wnck.Window window, bool is_on){
+        string cmd = "xprop -id %#.8x -f _GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED 32c -set _GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED %s";
 
         try {
-            Process.spawn_command_line_async(cmd.printf((uint) window.get_xid()));
+            Process.spawn_command_line_async(cmd.printf((uint) window.get_xid(), is_on ? "0x0" : "0x1"));
             if(window.is_maximized()) {
                 window.unmaximize();
                 window.maximize();
@@ -132,7 +141,7 @@ public class BudgiePixelSaverApplet : Budgie.Applet
     }
 
     private void on_window_opened(Wnck.Window window){
-        this.hide_title_bar_for_window(window);
+        this.toggle_title_bar_for_window(window, false);
     }
 
     private void set_states(bool is_enabled, string title){
