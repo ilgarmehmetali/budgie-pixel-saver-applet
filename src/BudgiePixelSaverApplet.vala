@@ -75,11 +75,7 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         });
 
         this.close_button.clicked.connect (() => {
-            unowned X.Window xwindow = Gdk.X11.get_default_root_xwindow();
-            unowned X.Display xdisplay = Gdk.X11.get_default_xdisplay();
-            Gdk.X11.Display display = Gdk.X11.Display.lookup_for_xdisplay(xdisplay);
-            Gdk.X11.Window window = new Gdk.X11.Window.foreign_for_display(display, xwindow);
-            this.active_window.close(Gdk.X11.get_server_time(window));
+            this.active_window.close(this.get_x_server_time());
         });
 
         this.screen.active_window_changed.connect( this.on_active_window_changed );
@@ -187,6 +183,14 @@ public class BudgiePixelSaverApplet : Budgie.Applet
     private void set_title(string name){
         this.label.set_text(name);
         this.label.set_tooltip_text(name);
+    }
+
+    private uint32 get_x_server_time() {
+        unowned X.Window xwindow = Gdk.X11.get_default_root_xwindow();
+        unowned X.Display xdisplay = Gdk.X11.get_default_xdisplay();
+        Gdk.X11.Display display = Gdk.X11.Display.lookup_for_xdisplay(xdisplay);
+        Gdk.X11.Window window = new Gdk.X11.Window.foreign_for_display(display, xwindow);
+        return Gdk.X11.get_server_time(window);
     }
 }
 
