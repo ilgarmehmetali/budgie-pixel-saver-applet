@@ -106,14 +106,27 @@ public class BudgiePixelSaverApplet : Budgie.Applet
     }
 
     private void toggle_title_bar_for_window(Wnck.Window window, bool is_on){
-        string cmd = "xprop -id %#.8x -f _GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED 32c -set _GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED %s";
-
         try {
-            Process.spawn_command_line_async(cmd.printf((uint) window.get_xid(), is_on ? "0x0" : "0x1"));
-            if(window.is_maximized()) {
-                window.unmaximize();
-                window.maximize();
-            }
+            string[] spawn_args = {"xprop", "-id", "%#.8x".printf((uint)window.get_xid()),
+                "-f", "_GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED", "32c", "-set",
+                "_GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED", is_on ? "0x0" : "0x1"};
+            string[] spawn_env = Environ.get ();
+            Pid child_pid;
+
+            Process.spawn_async ("/",
+                spawn_args,
+                spawn_env,
+                SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,
+                null,
+                out child_pid);
+
+            ChildWatch.add (child_pid, (pid, status) => {
+                if(window.is_maximized()) {
+                    window.unmaximize();
+                    window.maximize();
+                }
+                Process.close_pid (pid);
+            });
         } catch(SpawnError e){
             error(e.message);
         }
