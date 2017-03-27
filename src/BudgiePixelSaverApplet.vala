@@ -81,7 +81,7 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         this.screen.active_window_changed.connect( this.on_active_window_changed );
         this.screen.window_opened.connect( this.on_window_opened );
         this.screen.force_update();
-        unowned List<Wnck.Window> windows = this.screen.get_windows();
+        unowned List<Wnck.Window> windows = this.screen.get_windows_stacked();
         foreach(Wnck.Window window in windows){
             if(window.get_window_type() != Wnck.WindowType.NORMAL) continue;
 
@@ -97,7 +97,7 @@ public class BudgiePixelSaverApplet : Budgie.Applet
     }
 
     ~BudgiePixelSaverApplet() {
-        unowned List<Wnck.Window> windows = this.screen.get_windows();
+        unowned List<Wnck.Window> windows = this.screen.get_windows_stacked();
         foreach(Wnck.Window window in windows){
             if(window.get_window_type() != Wnck.WindowType.NORMAL) continue;
 
