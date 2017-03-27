@@ -11,29 +11,29 @@ public class BudgiePixelSaverApplet : Budgie.Applet
 {
 
     Wnck.Screen screen;
-    Wnck.Window activeWindow;
+    Wnck.Window active_window;
     Gtk.Label label;
     static int MAX_TITLE_LENGHT = 40;
-    Gtk.Button minimizeButton;
-    Gtk.Button maximizeButton;
-    Gtk.Button closeButton;
-    Gtk.Image maximizeImage;
-    Gtk.Image restoreImage;
+    Gtk.Button minimize_button;
+    Gtk.Button maximize_button;
+    Gtk.Button close_button;
+    Gtk.Image maximize_image;
+    Gtk.Image restore_image;
 
 
     public BudgiePixelSaverApplet()
     {
 
         this.screen = Wnck.Screen.get_default();
-        this.activeWindow = this.screen.get_active_window();
+        this.active_window = this.screen.get_active_window();
 
 
-        this.minimizeButton = new Gtk.Button.from_icon_name ("window-minimize-symbolic");
-        this.maximizeButton = new Gtk.Button.from_icon_name ("window-maximize-symbolic");
-        this.closeButton = new Gtk.Button.from_icon_name ("window-close-symbolic", Gtk.IconSize.BUTTON);
+        this.minimize_button = new Gtk.Button.from_icon_name ("window-minimize-symbolic");
+        this.maximize_button = new Gtk.Button.from_icon_name ("window-maximize-symbolic");
+        this.close_button = new Gtk.Button.from_icon_name ("window-close-symbolic", Gtk.IconSize.BUTTON);
 
-        this.maximizeImage = new Gtk.Image.from_icon_name ("window-maximize-symbolic", Gtk.IconSize.BUTTON);
-        this.restoreImage = new Gtk.Image.from_icon_name ("window-restore-symbolic", Gtk.IconSize.BUTTON);
+        this.maximize_image = new Gtk.Image.from_icon_name ("window-maximize-symbolic", Gtk.IconSize.BUTTON);
+        this.restore_image = new Gtk.Image.from_icon_name ("window-restore-symbolic", Gtk.IconSize.BUTTON);
 
 
         this.label = new Gtk.Label ("");
@@ -42,61 +42,61 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         this.label.set_width_chars(MAX_TITLE_LENGHT);
         this.label.set_alignment(0, 0.5f);
 
-        Gtk.EventBox eventBox = new Gtk.EventBox();
-        eventBox.add(this.label);
+        Gtk.EventBox event_box = new Gtk.EventBox();
+        event_box.add(this.label);
 
         Gtk.Box box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        box.pack_start (eventBox, false, false, 0);
-        box.pack_start (this.minimizeButton, false, false, 0);
-        box.pack_start (this.maximizeButton, false, false, 0);
-        box.pack_start (this.closeButton, false, false, 0);
+        box.pack_start (event_box, false, false, 0);
+        box.pack_start (this.minimize_button, false, false, 0);
+        box.pack_start (this.maximize_button, false, false, 0);
+        box.pack_start (this.close_button, false, false, 0);
         this.add (box);
 
 
-        eventBox.button_press_event.connect ((event) => {
-            if (event.type == Gdk.EventType.@2BUTTON_PRESS && this.activeWindow != null){
-                if (this.activeWindow.is_maximized())
-                    this.activeWindow.unmaximize();
+        event_box.button_press_event.connect ((event) => {
+            if (event.type == Gdk.EventType.@2BUTTON_PRESS && this.active_window != null){
+                if (this.active_window.is_maximized())
+                    this.active_window.unmaximize();
                 else
-                    this.activeWindow.maximize();
+                    this.active_window.maximize();
             }
             return Gdk.EVENT_PROPAGATE;
         });
 
-        this.minimizeButton.clicked.connect (() => {
-            this.activeWindow.minimize();
+        this.minimize_button.clicked.connect (() => {
+            this.active_window.minimize();
         });
 
-        this.maximizeButton.clicked.connect (() => {
-            if(this.activeWindow.is_maximized())
-                this.activeWindow.unmaximize();
+        this.maximize_button.clicked.connect (() => {
+            if(this.active_window.is_maximized())
+                this.active_window.unmaximize();
             else
-                this.activeWindow.maximize();
+                this.active_window.maximize();
         });
 
-        this.closeButton.clicked.connect (() => {
+        this.close_button.clicked.connect (() => {
             unowned X.Window xwindow = Gdk.X11.get_default_root_xwindow();
             unowned X.Display xdisplay = Gdk.X11.get_default_xdisplay();
             Gdk.X11.Display display = Gdk.X11.Display.lookup_for_xdisplay(xdisplay);
             Gdk.X11.Window window = new Gdk.X11.Window.foreign_for_display(display, xwindow);
-            this.activeWindow.close(Gdk.X11.get_server_time(window));
+            this.active_window.close(Gdk.X11.get_server_time(window));
         });
 
-        screen.active_window_changed.connect( this.onActiveWindowChanged );
-        screen.window_opened.connect( this.onWindowOpened );
+        this.screen.active_window_changed.connect( this.on_active_window_changed );
+        this.screen.window_opened.connect( this.on_window_opened );
         this.screen.force_update();
         unowned GLib.List<Wnck.Window> windows = this.screen.get_windows();
         foreach(Wnck.Window window in windows){
             if(window.get_window_type() != Wnck.WindowType.NORMAL) continue;
 
-            this.hideTitleBarForWindow(window);
+            this.hide_title_bar_for_window(window);
         }
-        this.onActiveWindowChanged(this.screen.get_active_window());
+        this.on_active_window_changed(this.screen.get_active_window());
         show_all();
 
     }
 
-    private void hideTitleBarForWindow(Wnck.Window window){
+    private void hide_title_bar_for_window(Wnck.Window window){
         string cmd = "xprop -id %#.8x -f _GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED 32c -set _GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED 0x1";
 
         try {
@@ -110,55 +110,55 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         }
     }
 
-    private void onActiveWindowChanged(Wnck.Window previousWindow){
-        if(previousWindow != null){
-            previousWindow.name_changed.disconnect( this.onActiveWindowNameChanged );
-            previousWindow.state_changed.disconnect( this.onActiveWindowStateChanged );
+    private void on_active_window_changed(Wnck.Window previous_window){
+        if(previous_window != null){
+            previous_window.name_changed.disconnect( this.on_active_window_name_changed );
+            previous_window.state_changed.disconnect( this.on_active_window_state_changed );
         }
 
-        this.activeWindow = this.screen.get_active_window();
-        if(this.activeWindow.get_window_type() != Wnck.WindowType.NORMAL){
-            this.activeWindow = null;
+        this.active_window = this.screen.get_active_window();
+        if(this.active_window.get_window_type() != Wnck.WindowType.NORMAL){
+            this.active_window = null;
         }
 
-        if(this.activeWindow != null){
-            this.activeWindow.name_changed.connect( this.onActiveWindowNameChanged );
-            this.activeWindow.state_changed.connect( this.onActiveWindowStateChanged );
-            this.setStates(true, this.activeWindow.get_name());
-            this.setMaximizeRestoreIcon();
+        if(this.active_window != null){
+            this.active_window.name_changed.connect( this.on_active_window_name_changed );
+            this.active_window.state_changed.connect( this.on_active_window_state_changed );
+            this.set_states(true, this.active_window.get_name());
+            this.set_maximize_restore_icon();
         } else {
-            this.setStates(false, "");
+            this.set_states(false, "");
         }
     }
 
-    private void onWindowOpened(Wnck.Window window){
-        this.hideTitleBarForWindow(window);
+    private void on_window_opened(Wnck.Window window){
+        this.hide_title_bar_for_window(window);
     }
 
-    private void setStates(bool isEnabled, string title){
-        this.maximizeButton.set_sensitive(isEnabled);
-        this.minimizeButton.set_sensitive(isEnabled);
-        this.closeButton.set_sensitive(isEnabled);
-        this.setTitle(title);
+    private void set_states(bool is_enabled, string title){
+        this.maximize_button.set_sensitive(is_enabled);
+        this.minimize_button.set_sensitive(is_enabled);
+        this.close_button.set_sensitive(is_enabled);
+        this.set_title(title);
     }
 
-    private void onActiveWindowNameChanged(){
-        this.setTitle(this.activeWindow.get_name());
+    private void on_active_window_name_changed(){
+        this.set_title(this.active_window.get_name());
     }
 
-    private void onActiveWindowStateChanged(Wnck.WindowState changed_mask, Wnck.WindowState new_state){
-        this.setMaximizeRestoreIcon();
+    private void on_active_window_state_changed(Wnck.WindowState changed_mask, Wnck.WindowState new_state){
+        this.set_maximize_restore_icon();
     }
 
-    private void setMaximizeRestoreIcon(){
-        if(this.activeWindow.is_maximized()) {
-            this.maximizeButton.image = this.restoreImage;
+    private void set_maximize_restore_icon(){
+        if(this.active_window.is_maximized()) {
+            this.maximize_button.image = this.restore_image;
         } else {
-            this.maximizeButton.image = this.maximizeImage;
+            this.maximize_button.image = this.maximize_image;
         }
     }
 
-    private void setTitle(string name){
+    private void set_title(string name){
         this.label.set_text(name);
         this.label.set_tooltip_text(name);
     }
