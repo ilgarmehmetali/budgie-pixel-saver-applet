@@ -94,6 +94,10 @@ public class BudgiePixelSaverApplet : Budgie.Applet
         this.on_active_window_changed(this.screen.get_active_window());
         show_all();
 
+        this.screen.window_closed.connect( (w) => {
+            this.screen.force_update();
+            this.on_active_window_changed(w);
+        });
     }
 
     ~BudgiePixelSaverApplet() {
