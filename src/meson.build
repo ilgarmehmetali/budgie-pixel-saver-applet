@@ -9,6 +9,7 @@ custom_target('plugin-file-workspaces',
 
 applet_budgie_pixel_saver_sources = [
     'BudgiePixelSaverApplet.vala',
+    'TitleBarManager.vala',
 ]
 
 applet_budgie_pixel_saver_deps = [
