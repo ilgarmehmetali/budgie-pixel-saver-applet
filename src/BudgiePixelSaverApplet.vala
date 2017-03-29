@@ -160,16 +160,10 @@ public class AppletSettings : Gtk.Grid
         this.attach(spinbutton_size, 1,0,1,1);
         this.settings.bind("size", spinbutton_size, "value", SettingsBindFlags.DEFAULT);
 
-
-        Gtk.ListStore list_store = new Gtk.ListStore (2, typeof (int), typeof (string));
-        Gtk.TreeIter iter;
-
-        list_store.append (out iter);
-        list_store.set (iter, 0, VISIBILITY_TITLE_BUTTONS, 1, "Title & Buttons");
-        list_store.append (out iter);
-        list_store.set (iter, 0, VISIBILITY_TITLE, 1, "Title");
-        list_store.append (out iter);
-        list_store.set (iter, 0, VISIBILITY_BUTTONS, 1, "Buttons");
+        Gtk.ListStore list_store = new Gtk.ListStore (1,typeof (string));
+        list_store.insert_with_values (null, VISIBILITY_TITLE_BUTTONS, 0, "Title & Buttons");
+        list_store.insert_with_values (null, VISIBILITY_TITLE, 0, "Title");
+        list_store.insert_with_values (null, VISIBILITY_BUTTONS, 0, "Buttons");
 
         Gtk.Label label_visibility = new Gtk.Label("Visible parts");
         label_visibility.set_hexpand(true);
@@ -181,7 +175,7 @@ public class AppletSettings : Gtk.Grid
         visibility.set_halign(Gtk.Align.END);
         Gtk.CellRendererText renderer = new Gtk.CellRendererText ();
         visibility.pack_start (renderer, true);
-        visibility.add_attribute (renderer, "text", 1);
+        visibility.add_attribute (renderer, "text", 0);
         this.attach(visibility, 1,1,1,1);
 
         this.settings.bind("visibility", visibility, "active", SettingsBindFlags.DEFAULT);
