@@ -4,7 +4,8 @@ custom_target('plugin-file-workspaces',
     output : 'BudgiePixelSaverApplet.plugin',
     command : ['cp', '@INPUT@', '@OUTPUT@'],
     install : true,
-    install_dir : meson.current_build_dir() + '/src')
+    install_dir: LIB_INSTALL_DIR,
+)
 
 
 applet_budgie_pixel_saver_sources = [
@@ -30,5 +31,10 @@ shared_library(
     c_args: [
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
     ],
-    install: false,
+    install: true,
+    install_dir: LIB_INSTALL_DIR,
+)
+
+install_data('net.milgar.budgie-pixel-saver.gschema.xml',
+    install_dir: '/usr/share/glib-2.0/schemas'
 )

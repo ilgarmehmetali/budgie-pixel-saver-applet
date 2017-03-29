@@ -1,4 +1,4 @@
-namespace BPS {
+namespace PixelSaver {
 public class TitleBarManager : Object {
 
     private Wnck.Screen screen;
