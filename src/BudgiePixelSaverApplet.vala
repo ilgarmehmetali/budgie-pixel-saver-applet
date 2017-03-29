@@ -150,7 +150,7 @@ public class AppletSettings : Gtk.Grid
 
         this.margin = 8;
 
-        Gtk.Label label_size = new Gtk.Label("Title size");
+        Gtk.Label label_size = new Gtk.Label("Title Length");
         label_size.set_hexpand(true);
         label_size.set_halign(Gtk.Align.START);
         this.attach(label_size, 0,0,1,1);
@@ -165,7 +165,7 @@ public class AppletSettings : Gtk.Grid
         list_store.insert_with_values (null, VISIBILITY_TITLE, 0, "Title");
         list_store.insert_with_values (null, VISIBILITY_BUTTONS, 0, "Buttons");
 
-        Gtk.Label label_visibility = new Gtk.Label("Visible parts");
+        Gtk.Label label_visibility = new Gtk.Label("Visibility");
         label_visibility.set_hexpand(true);
         label_visibility.set_halign(Gtk.Align.START);
         this.attach(label_visibility, 0,1,1,1);
