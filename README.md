@@ -3,6 +3,11 @@ This applet hides the title bar from maximized windows and creates a new one ins
 
 ![Screenshot](screenshot.jpg)
 
+* Added settings to choose action buttons and title bar visibility. This way its possible to create different layouts with multiple applets.
+* Added settings to set title length.
+
+![Screenshot](screenshot2.jpg)
+
 ---
 
 ## Dependencies
