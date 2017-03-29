@@ -1,6 +1,10 @@
 
 namespace PixelSaver {
 
+const int VISIBILITY_TITLE_BUTTONS = 0;
+const int VISIBILITY_TITLE = 1;
+const int VISIBILITY_BUTTONS = 2;
+
 public class Plugin : Budgie.Plugin, Peas.ExtensionBase
 {
     public Budgie.Applet get_panel_widget(string uuid)
@@ -93,9 +97,10 @@ public class Applet : Budgie.Applet
 
         this.settings = this.get_applet_settings(uuid);
         this.settings.changed.connect(on_settings_change);
-        this.on_settings_change("size");
-
         show_all();
+        this.on_settings_change("size");
+        this.on_settings_change("visibility");
+
     }
 
     void on_settings_change(string key) {
@@ -105,25 +110,23 @@ public class Applet : Budgie.Applet
         } else if (key == "visibility") {
             int visibility = settings.get_int(key);
             switch (visibility) {
-                case 0:
+                case VISIBILITY_TITLE_BUTTONS:
                     this.label.show();
                     break;
-                case 1:
+                case VISIBILITY_TITLE:
                     this.label.show();
                     this.maximize_button.hide();
                     this.minimize_button.hide();
                     this.close_button.hide();
                     break;
-                case 2:
+                case VISIBILITY_BUTTONS:
                     this.label.hide();
                     this.maximize_button.show();
                     this.minimize_button.show();
                     this.close_button.show();
                     break;
-
             }
         }
-
         queue_resize();
     }
 
@@ -162,11 +165,11 @@ public class AppletSettings : Gtk.Grid
         Gtk.TreeIter iter;
 
         list_store.append (out iter);
-        list_store.set (iter, 0, 0, 1, "Title & Buttons");
+        list_store.set (iter, 0, VISIBILITY_TITLE_BUTTONS, 1, "Title & Buttons");
         list_store.append (out iter);
-        list_store.set (iter, 0, 1, 1, "Title");
+        list_store.set (iter, 0, VISIBILITY_TITLE, 1, "Title");
         list_store.append (out iter);
-        list_store.set (iter, 0, 2, 1, "Buttons");
+        list_store.set (iter, 0, VISIBILITY_BUTTONS, 1, "Buttons");
 
         Gtk.Label label_visibility = new Gtk.Label("Visible parts");
         label_visibility.set_hexpand(true);
