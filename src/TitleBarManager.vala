@@ -2,9 +2,9 @@ namespace PixelSaver {
 public class TitleBarManager : Object {
 
     private Wnck.Screen screen;
-    private Wnck.Window active_window;
+    private Wnck.Window? active_window;
 
-    private static TitleBarManager instance;
+    private static TitleBarManager? instance;
 
     private int references;
 
@@ -117,7 +117,7 @@ public class TitleBarManager : Object {
         }
     }
 
-    private void on_wnck_active_window_changed(Wnck.Window previous_window){
+    private void on_wnck_active_window_changed(Wnck.Window? previous_window){
         if(previous_window != null){
             previous_window.name_changed.disconnect( this.on_active_window_name_changed );
             previous_window.state_changed.disconnect( this.on_active_window_state_changed );

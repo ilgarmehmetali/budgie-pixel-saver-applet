@@ -156,7 +156,7 @@ public class AppletSettings : Gtk.Grid
 {
     Settings? settings = null;
 
-    public AppletSettings(Settings settings)
+    public AppletSettings(Settings? settings)
     {
         this.settings = settings;
 
