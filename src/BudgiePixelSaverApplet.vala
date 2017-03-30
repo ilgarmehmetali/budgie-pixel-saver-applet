@@ -112,6 +112,9 @@ public class Applet : Budgie.Applet
             switch (visibility) {
                 case VISIBILITY_TITLE_BUTTONS:
                     this.label.show();
+                    this.maximize_button.show();
+                    this.minimize_button.show();
+                    this.close_button.show();
                     break;
                 case VISIBILITY_TITLE:
                     this.label.show();
