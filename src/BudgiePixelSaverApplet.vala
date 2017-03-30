@@ -26,10 +26,13 @@ public class Applet : Budgie.Applet
 
     private Settings? settings;
 
+    PixelSaver.TitleBarManager title_bar_manager;
 
     public Applet(string uuid)
     {
         Object(uuid: uuid);
+        this.title_bar_manager = PixelSaver.TitleBarManager.INSTANCE;
+        this.title_bar_manager.register();
 
         this.minimize_button = new Gtk.Button.from_icon_name ("window-minimize-symbolic");
         this.maximize_button = new Gtk.Button.from_icon_name ("window-maximize-symbolic");
@@ -56,29 +59,29 @@ public class Applet : Budgie.Applet
 
         event_box.button_press_event.connect ((event) => {
             if (event.type == Gdk.EventType.@2BUTTON_PRESS){
-                PixelSaver.TitleBarManager.INSTANCE.toggle_maximize_active_window();
+                this.title_bar_manager.toggle_maximize_active_window();
             }
             return Gdk.EVENT_PROPAGATE;
         });
 
         this.minimize_button.clicked.connect (() => {
-            PixelSaver.TitleBarManager.INSTANCE.minimize_active_window();
+            this.title_bar_manager.minimize_active_window();
         });
 
         this.maximize_button.clicked.connect (() => {
-            PixelSaver.TitleBarManager.INSTANCE.toggle_maximize_active_window();
+            this.title_bar_manager.toggle_maximize_active_window();
         });
 
         this.close_button.clicked.connect (() => {
-            PixelSaver.TitleBarManager.INSTANCE.close_active_window();
+            this.title_bar_manager.close_active_window();
         });
 
-        PixelSaver.TitleBarManager.INSTANCE.on_title_changed.connect((title) => {
+        this.title_bar_manager.on_title_changed.connect((title) => {
             this.label.set_text(title);
             this.label.set_tooltip_text(title);
         });
 
-        PixelSaver.TitleBarManager.INSTANCE.on_window_state_changed.connect((is_maximized) => {
+        this.title_bar_manager.on_window_state_changed.connect((is_maximized) => {
             if(is_maximized) {
                 this.maximize_button.image = this.restore_image;
             } else {
@@ -86,7 +89,7 @@ public class Applet : Budgie.Applet
             }
         });
 
-        PixelSaver.TitleBarManager.INSTANCE.on_active_window_changed.connect(
+        this.title_bar_manager.on_active_window_changed.connect(
             (is_null, can_minimize, can_maximize, can_close) => {
                 this.minimize_button.set_sensitive(can_minimize);
                 this.maximize_button.set_sensitive(can_maximize);
@@ -103,6 +106,10 @@ public class Applet : Budgie.Applet
         this.on_settings_change("size");
         this.on_settings_change("visibility");
 
+    }
+
+    ~Applet(){
+        this.title_bar_manager.unregister();
     }
 
     void on_settings_change(string key) {

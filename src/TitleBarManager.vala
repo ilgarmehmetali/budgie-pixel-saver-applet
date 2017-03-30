@@ -6,6 +6,8 @@ public class TitleBarManager : Object {
 
     private static TitleBarManager instance;
 
+    private int references;
+
     public static TitleBarManager INSTANCE {
         get {
             if(instance == null){
@@ -18,6 +20,22 @@ public class TitleBarManager : Object {
     public signal void on_title_changed (string title);
     public signal void on_window_state_changed (bool is_maximized);
     public signal void on_active_window_changed (bool is_null, bool can_minimize, bool can_maximize, bool can_close);
+
+    /*
+     * Should call this at construster
+     */
+    public void register(){
+        references++;
+    }
+
+    /*
+     * Should call this at destructer
+     */
+    public void unregister(){
+        if(--references <= 0){
+            instance = null;
+        }
+    }
 
     private TitleBarManager()
     {
