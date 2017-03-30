@@ -86,11 +86,13 @@ public class Applet : Budgie.Applet
             }
         });
 
-        PixelSaver.TitleBarManager.INSTANCE.on_active_window_changed.connect((is_null) => {
-            this.maximize_button.set_sensitive(!is_null);
-            this.minimize_button.set_sensitive(!is_null);
-            this.close_button.set_sensitive(!is_null);
-        });
+        PixelSaver.TitleBarManager.INSTANCE.on_active_window_changed.connect(
+            (is_null, can_minimize, can_maximize, can_close) => {
+                this.minimize_button.set_sensitive(can_minimize);
+                this.maximize_button.set_sensitive(can_maximize);
+                this.close_button.set_sensitive(can_close);
+            }
+        );
 
         settings_schema = "net.milgar.budgie-pixel-saver";
         settings_prefix = "/com/solus-project/budgie-panel/instance/pixel-saver";

@@ -17,7 +17,7 @@ public class TitleBarManager : Object {
 
     public signal void on_title_changed (string title);
     public signal void on_window_state_changed (bool is_maximized);
-    public signal void on_active_window_changed (bool is_null);
+    public signal void on_active_window_changed (bool is_null, bool can_minimize, bool can_maximize, bool can_close);
 
     private TitleBarManager()
     {
@@ -105,19 +105,27 @@ public class TitleBarManager : Object {
             previous_window.state_changed.disconnect( this.on_active_window_state_changed );
         }
 
+        bool can_minimize = false;
+        bool can_maximize = false;
+        bool can_close = false;
         this.active_window = this.screen.get_active_window();
         if(this.active_window.get_window_type() != Wnck.WindowType.NORMAL){
             this.active_window = null;
         }
 
         if(this.active_window != null){
+            Wnck.WindowActions actions = this.active_window.get_actions();
+            can_minimize = (actions & Wnck.WindowActions.MINIMIZE) > 0;
+            can_maximize = (actions & Wnck.WindowActions.MAXIMIZE) > 0;
+            can_close = (actions & Wnck.WindowActions.CLOSE) > 0;
+
             this.active_window.name_changed.connect( this.on_active_window_name_changed );
             this.active_window.state_changed.connect( this.on_active_window_state_changed );
             this.on_title_changed(this.active_window.get_name());
         } else {
             this.on_title_changed("");
         }
-        this.on_active_window_changed(this.active_window == null);
+        this.on_active_window_changed(this.active_window == null, can_minimize, can_maximize, can_close);
     }
 
     private void on_window_opened(Wnck.Window window){
