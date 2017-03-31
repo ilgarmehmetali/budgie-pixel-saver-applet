@@ -98,7 +98,7 @@ public class Applet : Budgie.Applet
         );
 
         settings_schema = "net.milgar.budgie-pixel-saver";
-        settings_prefix = "/com/solus-project/budgie-panel/instance/pixel-saver";
+        settings_prefix = "/net/milgar/budgie-pixel-saver";
 
         this.settings = this.get_applet_settings(uuid);
         this.settings.changed.connect(on_settings_change);
@@ -152,45 +152,23 @@ public class Applet : Budgie.Applet
     }
 }
 
+[GtkTemplate (ui = "/net/milgar/budgie-pixel-saver/settings.ui")]
 public class AppletSettings : Gtk.Grid
 {
     Settings? settings = null;
+
+    [GtkChild]
+    private Gtk.SpinButton? spinbutton_length;
+
+    [GtkChild]
+    private Gtk.ComboBox? combobox_visibility;
 
     public AppletSettings(Settings? settings)
     {
         this.settings = settings;
 
-        this.margin = 8;
-
-        Gtk.Label label_size = new Gtk.Label("Title Length");
-        label_size.set_hexpand(true);
-        label_size.set_halign(Gtk.Align.START);
-        this.attach(label_size, 0,0,1,1);
-        Gtk.SpinButton spinbutton_size = new Gtk.SpinButton.with_range (0, 100, 1);
-        spinbutton_size.set_hexpand(true);
-        spinbutton_size.set_halign(Gtk.Align.END);
-        this.attach(spinbutton_size, 1,0,1,1);
-        this.settings.bind("size", spinbutton_size, "value", SettingsBindFlags.DEFAULT);
-
-        Gtk.ListStore list_store = new Gtk.ListStore (1,typeof (string));
-        list_store.insert_with_values (null, VISIBILITY_TITLE_BUTTONS, 0, "Title & Buttons");
-        list_store.insert_with_values (null, VISIBILITY_TITLE, 0, "Title");
-        list_store.insert_with_values (null, VISIBILITY_BUTTONS, 0, "Buttons");
-
-        Gtk.Label label_visibility = new Gtk.Label("Visibility");
-        label_visibility.set_hexpand(true);
-        label_visibility.set_halign(Gtk.Align.START);
-        this.attach(label_visibility, 0,1,1,1);
-
-        Gtk.ComboBox visibility = new Gtk.ComboBox.with_model (list_store);
-        visibility.set_hexpand(true);
-        visibility.set_halign(Gtk.Align.END);
-        Gtk.CellRendererText renderer = new Gtk.CellRendererText ();
-        visibility.pack_start (renderer, true);
-        visibility.add_attribute (renderer, "text", 0);
-        this.attach(visibility, 1,1,1,1);
-
-        this.settings.bind("visibility", visibility, "active", SettingsBindFlags.DEFAULT);
+        this.settings.bind("size", spinbutton_length, "value", SettingsBindFlags.DEFAULT);
+        this.settings.bind("visibility", combobox_visibility, "active", SettingsBindFlags.DEFAULT);
     }
 }
 

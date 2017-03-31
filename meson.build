@@ -10,7 +10,7 @@ project(
     ],
 )
 
-
+gnome = import('gnome')
 
 am_cflags = [
     '-fstack-protector',

@@ -7,10 +7,21 @@ custom_target('plugin-file-workspaces',
     install_dir: LIB_INSTALL_DIR,
 )
 
+gresource = join_paths(meson.current_source_dir(), 'plugin.gresource.xml')
+
+# Compile the assets into the binary
+applet_budgie_pixel_saver_resources = gnome.compile_resources(
+    'budgie-pixel-saver-applet-resources',
+    gresource,
+    source_dir: meson.current_source_dir(),
+    c_name: 'budgie_pixel_saver',
+)
+
 
 applet_budgie_pixel_saver_sources = [
     'BudgiePixelSaverApplet.vala',
     'TitleBarManager.vala',
+    applet_budgie_pixel_saver_resources,
 ]
 
 applet_budgie_pixel_saver_deps = [
