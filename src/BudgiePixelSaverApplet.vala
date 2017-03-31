@@ -22,6 +22,11 @@ public class Applet : Budgie.Applet
     Gtk.Image maximize_image;
     Gtk.Image restore_image;
 
+    bool is_buttons_visible {get; set;}
+    bool is_title_visible {get; set;}
+    bool is_active_window_csd {get; set;}
+    bool is_active_window_maximized {get; set;}
+
     public string uuid { public set; public get; }
 
     private Settings? settings;
@@ -120,25 +125,42 @@ public class Applet : Budgie.Applet
             int visibility = settings.get_int(key);
             switch (visibility) {
                 case VISIBILITY_TITLE_BUTTONS:
-                    this.label.show();
-                    this.maximize_button.show();
-                    this.minimize_button.show();
-                    this.close_button.show();
+                    this.is_buttons_visible = true;
+                    this.is_title_visible = true;
                     break;
                 case VISIBILITY_TITLE:
-                    this.label.show();
-                    this.maximize_button.hide();
-                    this.minimize_button.hide();
-                    this.close_button.hide();
+                    this.is_buttons_visible = false;
+                    this.is_title_visible = true;
                     break;
                 case VISIBILITY_BUTTONS:
-                    this.label.hide();
-                    this.maximize_button.show();
-                    this.minimize_button.show();
-                    this.close_button.show();
+                    this.is_buttons_visible = true;
+                    this.is_title_visible = false;
                     break;
             }
         }
+        this.update_visibility();
+    }
+
+    void update_visibility(){
+        bool hide_for_csd = this.is_active_window_csd && this.settings.get_boolean("hide_for_csd");
+        bool hide_for_maximized = this.is_active_window_maximized && this.settings.get_boolean("hide_for_maximized");
+
+        if( !this.is_buttons_visible || hide_for_maximized || hide_for_csd ) {
+            this.maximize_button.hide();
+            this.minimize_button.hide();
+            this.close_button.hide();
+        } else {
+            this.maximize_button.show();
+            this.minimize_button.show();
+            this.close_button.show();
+        }
+
+        if(!this.is_title_visible || hide_for_csd || hide_for_maximized) {
+            this.label.hide();
+        } else {
+            this.label.show();
+        }
+
         queue_resize();
     }
 
@@ -163,12 +185,20 @@ public class AppletSettings : Gtk.Grid
     [GtkChild]
     private Gtk.ComboBox? combobox_visibility;
 
+    [GtkChild]
+    private Gtk.CheckButton? checkbutton_csd;
+
+    [GtkChild]
+    private Gtk.CheckButton? checkbutton_maximized;
+
     public AppletSettings(Settings? settings)
     {
         this.settings = settings;
 
         this.settings.bind("size", spinbutton_length, "value", SettingsBindFlags.DEFAULT);
         this.settings.bind("visibility", combobox_visibility, "active", SettingsBindFlags.DEFAULT);
+        this.settings.bind("hide-for-csd", checkbutton_csd, "active", SettingsBindFlags.DEFAULT);
+        this.settings.bind("hide-for-maximized", checkbutton_maximized, "active", SettingsBindFlags.DEFAULT);
     }
 }
 
