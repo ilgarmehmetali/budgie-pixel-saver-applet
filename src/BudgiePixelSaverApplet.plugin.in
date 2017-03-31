@@ -2,7 +2,7 @@
 Module=libbudgiepixelsaverapplet.so
 Name=Budgie Pixel Saver
 Description=Pixel Saver
-Authors=Mehmet Ali İLGAR
+Authors=Mehmet Ali İLGAR <mehmet.ali@milgar.net>
 Copyright=Copyright © 2017 Mehmet Ali İLGAR
-Website=https://milgar.net
+Website=https://github.com/ilgarmehmetali/budgie-pixel-saver-applet
 Icon=view-more-horizontal-symbolic
