@@ -87,6 +87,8 @@ public class Applet : Budgie.Applet
         });
 
         this.title_bar_manager.on_window_state_changed.connect((is_maximized) => {
+            this.is_active_window_maximized = is_maximized;
+            this.update_visibility(false);
             if(is_maximized) {
                 this.maximize_button.image = this.restore_image;
             } else {
@@ -95,10 +97,13 @@ public class Applet : Budgie.Applet
         });
 
         this.title_bar_manager.on_active_window_changed.connect(
-            (is_null, can_minimize, can_maximize, can_close) => {
+            (can_minimize, can_maximize, can_close, is_active_window_csd, is_active_window_maximized) => {
                 this.minimize_button.set_sensitive(can_minimize);
                 this.maximize_button.set_sensitive(can_maximize);
                 this.close_button.set_sensitive(can_close);
+                this.is_active_window_csd = is_active_window_csd;
+                this.is_active_window_maximized = is_active_window_maximized;
+                this.update_visibility(false);
             }
         );
 
@@ -138,14 +143,14 @@ public class Applet : Budgie.Applet
                     break;
             }
         }
-        this.update_visibility();
+        this.update_visibility(true);
     }
 
-    void update_visibility(){
-        bool hide_for_csd = this.is_active_window_csd && this.settings.get_boolean("hide_for_csd");
-        bool hide_for_maximized = this.is_active_window_maximized && this.settings.get_boolean("hide_for_maximized");
+    void update_visibility(bool is_settings_changed = false){
+        bool hide_for_csd = this.is_active_window_csd && this.settings.get_boolean("hide-for-csd");
+        bool hide_for_unmaximized = !this.is_active_window_maximized && this.settings.get_boolean("hide-for-unmaximized");
 
-        if( !this.is_buttons_visible || hide_for_maximized || hide_for_csd ) {
+        if( !this.is_buttons_visible || hide_for_unmaximized || hide_for_csd ) {
             this.maximize_button.hide();
             this.minimize_button.hide();
             this.close_button.hide();
@@ -155,7 +160,7 @@ public class Applet : Budgie.Applet
             this.close_button.show();
         }
 
-        if(!this.is_title_visible || hide_for_csd || hide_for_maximized) {
+        if(!this.is_title_visible || hide_for_csd || hide_for_unmaximized) {
             this.label.hide();
         } else {
             this.label.show();
@@ -198,7 +203,7 @@ public class AppletSettings : Gtk.Grid
         this.settings.bind("size", spinbutton_length, "value", SettingsBindFlags.DEFAULT);
         this.settings.bind("visibility", combobox_visibility, "active", SettingsBindFlags.DEFAULT);
         this.settings.bind("hide-for-csd", checkbutton_csd, "active", SettingsBindFlags.DEFAULT);
-        this.settings.bind("hide-for-maximized", checkbutton_maximized, "active", SettingsBindFlags.DEFAULT);
+        this.settings.bind("hide-for-unmaximized", checkbutton_maximized, "active", SettingsBindFlags.DEFAULT);
     }
 }
 

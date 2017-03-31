@@ -16,10 +16,10 @@
       <summary>Hide if window is CSD</summary>
       <description>Whether to hide applet if window is Client Side Decoreted</description>
     </key>
-    <key type="b" name="hide-for-maximized">
+    <key type="b" name="hide-for-unmaximized">
       <default>false</default>
-      <summary>Hide if window is maximixed</summary>
-      <description>Whether to hide applet if window is maximized</description>
+      <summary>Hide if window is unmaximixed</summary>
+      <description>Whether to hide applet if window is unmaximized</description>
     </key>
   </schema>
 </schemalist>

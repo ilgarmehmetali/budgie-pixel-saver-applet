@@ -19,7 +19,7 @@ public class TitleBarManager : Object {
 
     public signal void on_title_changed (string title);
     public signal void on_window_state_changed (bool is_maximized);
-    public signal void on_active_window_changed (bool is_null, bool can_minimize, bool can_maximize, bool can_close);
+    public signal void on_active_window_changed (bool can_minimize, bool can_maximize, bool can_close, bool is_active_window_csd, bool is_active_window_maximized);
 
     /*
      * Should call this at construster
@@ -143,7 +143,7 @@ public class TitleBarManager : Object {
         } else {
             this.on_title_changed("");
         }
-        this.on_active_window_changed(this.active_window == null, can_minimize, can_maximize, can_close);
+        this.on_active_window_changed(can_minimize, can_maximize, can_close, false, this.active_window.is_maximized());
     }
 
     private void on_window_opened(Wnck.Window window){
