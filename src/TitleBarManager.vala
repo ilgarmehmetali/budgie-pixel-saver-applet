@@ -117,6 +117,33 @@ public class TitleBarManager : Object {
         }
     }
 
+    private bool is_window_csd(Wnck.Window window){
+        try {
+            string[] spawn_args = {"xprop", "-id",
+                "%#.8x".printf((uint)window.get_xid()), "_MOTIF_WM_HINTS"};
+            string[] spawn_env = Environ.get ();
+            string ls_stdout;
+            string ls_stderr;
+            int ls_status;
+
+            Process.spawn_sync ("/",
+                spawn_args,
+                spawn_env,
+                SpawnFlags.SEARCH_PATH,
+                null,
+                out ls_stdout,
+                out ls_stderr,
+                out ls_status);
+
+            if(ls_stdout.strip() == "_MOTIF_WM_HINTS(_MOTIF_WM_HINTS) = 0x2, 0x0, 0x0, 0x0, 0x0"){
+                return true;
+            }
+        } catch(SpawnError e){
+            error(e.message);
+        }
+        return false;
+    }
+
     private void on_wnck_active_window_changed(Wnck.Window? previous_window){
         if(previous_window != null){
             previous_window.name_changed.disconnect( this.on_active_window_name_changed );
@@ -126,6 +153,8 @@ public class TitleBarManager : Object {
         bool can_minimize = false;
         bool can_maximize = false;
         bool can_close = false;
+        bool is_csd = false;
+        bool is_maximized = false;
         this.active_window = this.screen.get_active_window();
         if(this.active_window.get_window_type() != Wnck.WindowType.NORMAL){
             this.active_window = null;
@@ -136,6 +165,8 @@ public class TitleBarManager : Object {
             can_minimize = (actions & Wnck.WindowActions.MINIMIZE) > 0;
             can_maximize = (actions & Wnck.WindowActions.MAXIMIZE) > 0;
             can_close = (actions & Wnck.WindowActions.CLOSE) > 0;
+            is_csd = this.is_window_csd(this.active_window);
+            is_maximized = this.active_window.is_maximized();
 
             this.active_window.name_changed.connect( this.on_active_window_name_changed );
             this.active_window.state_changed.connect( this.on_active_window_state_changed );
@@ -143,7 +174,7 @@ public class TitleBarManager : Object {
         } else {
             this.on_title_changed("");
         }
-        this.on_active_window_changed(can_minimize, can_maximize, can_close, false, this.active_window.is_maximized());
+        this.on_active_window_changed(can_minimize, can_maximize, can_close, is_csd, is_maximized);
     }
 
     private void on_window_opened(Wnck.Window window){
