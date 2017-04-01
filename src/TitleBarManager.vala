@@ -110,6 +110,14 @@ public class TitleBarManager : Object {
                     window.unmaximize();
                     window.maximize();
                 }
+                if(window.is_maximized_horizontally()) {
+                    window.unmaximize_horizontally();
+                    window.maximize_horizontally();
+                }
+                if(window.is_maximized_vertically()) {
+                    window.unmaximize_vertically();
+                    window.maximize_vertically();
+                }
                 Process.close_pid (pid);
             });
         } catch(SpawnError e){
