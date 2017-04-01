@@ -156,7 +156,7 @@ public class TitleBarManager : Object {
         bool is_csd = false;
         bool is_maximized = false;
         this.active_window = this.screen.get_active_window();
-        if(this.active_window.get_window_type() != Wnck.WindowType.NORMAL){
+        if(this.active_window != null && this.active_window.get_window_type() != Wnck.WindowType.NORMAL){
             this.active_window = null;
         }
 
