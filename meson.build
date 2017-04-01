@@ -37,7 +37,7 @@ dep_peas = dependency('libpeas-1.0', version: '>= 1.8.0')
 dep_budgie = dependency('budgie-1.0', version: '>= 2')
 dep_wnck = dependency('libwnck-3.0', version: '>= 3.14.0')
 
-LIB_INSTALL_DIR = '/usr/lib/budgie-desktop/plugins/'
+LIB_INSTALL_DIR = '/usr/lib/budgie-desktop/plugins/budgie-pixel-saver-applet/'
 
 subdir('src')
 
