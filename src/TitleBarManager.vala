@@ -68,6 +68,10 @@ public class TitleBarManager : Object {
         }
     }
 
+    public Wnck.ActionMenu? get_action_menu_for_active_window() {
+        return new Wnck.ActionMenu(this.active_window);
+    }
+
     public void close_active_window(){
         if(this.active_window == null) return;
 

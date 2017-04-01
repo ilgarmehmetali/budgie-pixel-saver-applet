@@ -69,6 +69,15 @@ public class Applet : Budgie.Applet
             return Gdk.EVENT_PROPAGATE;
         });
 
+        event_box.button_release_event.connect ((event) => {
+            if (event.button == 3) {
+                Wnck.ActionMenu menu = this.title_bar_manager.get_action_menu_for_active_window();
+                menu.popup(null, null, null, event.button, Gtk.get_current_event_time());
+                return true;
+            }
+            return Gdk.EVENT_PROPAGATE;
+        });
+
         this.minimize_button.clicked.connect (() => {
             this.title_bar_manager.minimize_active_window();
         });
