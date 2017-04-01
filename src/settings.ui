@@ -95,6 +95,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="halign">end</property>
+        <property name="valign">start</property>
         <property name="adjustment">adjustment1</property>
         <property name="climb_rate">1</property>
       </object>
@@ -108,6 +109,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
+        <property name="valign">start</property>
         <property name="model">liststore1</property>
         <property name="active">0</property>
         <property name="id_column">0</property>
@@ -124,35 +126,27 @@
       </packing>
     </child>
     <child>
-      <object class="GtkCheckButton" id="checkbutton_csd">
+      <object class="GtkSwitch" id="switch_unmaximized">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
         <property name="halign">end</property>
-        <property name="draw_indicator">True</property>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkCheckButton" id="checkbutton_maximized">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="halign">end</property>
-        <property name="draw_indicator">True</property>
-        <child>
-          <placeholder/>
-        </child>
+        <property name="valign">start</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
         <property name="top_attach">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSwitch" id="switch_csd">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="halign">end</property>
+        <property name="valign">start</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">2</property>
       </packing>
     </child>
   </template>

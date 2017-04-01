@@ -191,10 +191,10 @@ public class AppletSettings : Gtk.Grid
     private Gtk.ComboBox? combobox_visibility;
 
     [GtkChild]
-    private Gtk.CheckButton? checkbutton_csd;
+    private Gtk.Switch? switch_csd;
 
     [GtkChild]
-    private Gtk.CheckButton? checkbutton_maximized;
+    private Gtk.Switch? switch_unmaximized;
 
     public AppletSettings(Settings? settings)
     {
@@ -202,8 +202,8 @@ public class AppletSettings : Gtk.Grid
 
         this.settings.bind("size", spinbutton_length, "value", SettingsBindFlags.DEFAULT);
         this.settings.bind("visibility", combobox_visibility, "active", SettingsBindFlags.DEFAULT);
-        this.settings.bind("hide-for-csd", checkbutton_csd, "active", SettingsBindFlags.DEFAULT);
-        this.settings.bind("hide-for-unmaximized", checkbutton_maximized, "active", SettingsBindFlags.DEFAULT);
+        this.settings.bind("hide-for-csd", switch_csd, "active", SettingsBindFlags.DEFAULT);
+        this.settings.bind("hide-for-unmaximized", switch_unmaximized, "active", SettingsBindFlags.DEFAULT);
     }
 }
 
