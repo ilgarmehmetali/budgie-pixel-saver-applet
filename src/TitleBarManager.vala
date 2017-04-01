@@ -54,7 +54,7 @@ public class TitleBarManager : Object {
         this.on_wnck_active_window_changed(this.screen.get_active_window());
 
         this.screen.window_closed.connect( (w) => {
-            this.screen.force_update();
+            //this.screen.force_update();
             this.on_wnck_active_window_changed(w);
         });
     }
