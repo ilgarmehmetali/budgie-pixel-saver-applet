@@ -68,7 +68,7 @@
         <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="label" translatable="yes">Hide for Client Side
-Decoreted windows</property>
+Decorated windows</property>
         <property name="wrap">True</property>
         <property name="xalign">0</property>
       </object>
