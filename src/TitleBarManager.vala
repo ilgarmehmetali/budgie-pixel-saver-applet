@@ -110,18 +110,19 @@ public class TitleBarManager : Object {
                 out child_pid);
 
             ChildWatch.add (child_pid, (pid, status) => {
-                if(window.is_maximized()) {
-                    window.unmaximize();
-                    window.maximize();
-                }
-                if(window.is_maximized_horizontally()) {
-                    window.unmaximize_horizontally();
-                    window.maximize_horizontally();
-                }
-                if(window.is_maximized_vertically()) {
-                    window.unmaximize_vertically();
-                    window.maximize_vertically();
-                }
+                Timeout.add(30, () => {
+                    if(window.is_maximized()) {
+                        window.unmaximize();
+                        window.maximize();
+                    } else if(window.is_maximized_horizontally()) {
+                        window.unmaximize_horizontally();
+                        window.maximize_horizontally();
+                    } else if(window.is_maximized_vertically()) {
+                        window.unmaximize_vertically();
+                        window.maximize_vertically();
+                    }
+                    return false;
+                });
                 Process.close_pid (pid);
             });
         } catch(SpawnError e){
