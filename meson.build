@@ -41,4 +41,4 @@ LIB_INSTALL_DIR = join_paths(get_option('prefix'), get_option('libdir'), 'budgie
 
 subdir('src')
 
-meson.add_install_script('./meson_post_install.sh')
+meson.add_install_script('meson_post_install.py')
