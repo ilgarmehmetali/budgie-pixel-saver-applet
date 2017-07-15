@@ -26,7 +26,9 @@ vala
 
 **From source**  
 ```bash
-mkdir build && cd build && meson && ninja
+mkdir build && cd build
+meson --prefix /usr --buildtype=plain ..
+ninja
 sudo ninja install
 ```
 
