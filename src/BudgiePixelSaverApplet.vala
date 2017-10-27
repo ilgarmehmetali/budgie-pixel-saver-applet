@@ -204,6 +204,26 @@ public class Applet : Budgie.Applet
         }
     }
 
+    /**
+     * Update the tasklist orientation to match the panel direction
+     */
+    public override void panel_position_changed(Budgie.PanelPosition position)
+    {
+        if (position == Budgie.PanelPosition.LEFT) {
+            this.label.angle = 90;
+            this.applet_container.orientation = Gtk.Orientation.VERTICAL;
+            this.label.set_alignment(0.5f, 1);
+        } else if (position == Budgie.PanelPosition.RIGHT) {
+            this.label.angle = 270;
+            this.applet_container.orientation = Gtk.Orientation.VERTICAL;
+            this.label.set_alignment(0.5f, 0);
+        } else {
+            this.label.angle = 0;
+            this.applet_container.orientation = Gtk.Orientation.HORIZONTAL;
+            this.label.set_alignment(0, 0.5f);
+        }
+    }
+
     public override bool supports_settings() {
         return true;
     }
