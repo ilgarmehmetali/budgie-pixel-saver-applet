@@ -21,6 +21,7 @@ public class Applet : Budgie.Applet
     Gtk.Button close_button;
     Gtk.Image maximize_image;
     Gtk.Image restore_image;
+    Gtk.EventBox event_box;
     Gtk.Box applet_container;
 
     bool is_buttons_visible {get; set;}
@@ -31,6 +32,7 @@ public class Applet : Budgie.Applet
     public string uuid { public set; public get; }
 
     private Settings? settings;
+    private Settings? wm_settings;
 
     PixelSaver.TitleBarManager title_bar_manager;
 
@@ -52,8 +54,8 @@ public class Applet : Budgie.Applet
         this.label.set_ellipsize (Pango.EllipsizeMode.END);
         this.label.set_alignment(0, 0.5f);
 
-        Gtk.EventBox event_box = new Gtk.EventBox();
-        event_box.add(this.label);
+        this.event_box = new Gtk.EventBox();
+        this.event_box.add(this.label);
 
         this.applet_container = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         this.applet_container.pack_start (this.event_box, false, false, 0);
@@ -126,6 +128,11 @@ public class Applet : Budgie.Applet
         this.on_settings_change("size");
         this.on_settings_change("visibility");
 
+
+        wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
+        wm_settings.changed.connect(this.on_wm_settings_changed);
+        this.on_wm_settings_changed("button-style");
+
     }
 
     ~Applet(){
@@ -177,6 +184,24 @@ public class Applet : Budgie.Applet
         }
 
         queue_resize();
+    }
+
+    void on_wm_settings_changed(string key){
+        if(key != "button-style")
+            return;
+
+        string button_style = wm_settings.get_string(key);
+        if (button_style == "traditional") {
+            this.applet_container.reorder_child (this.event_box, 0);
+            this.applet_container.reorder_child (this.minimize_button, 1);
+            this.applet_container.reorder_child (this.maximize_button, 2);
+            this.applet_container.reorder_child (this.close_button, 3);
+        } else if(button_style == "left") {
+            this.applet_container.reorder_child (this.close_button, 0);
+            this.applet_container.reorder_child (this.minimize_button, 1);
+            this.applet_container.reorder_child (this.maximize_button, 2);
+            this.applet_container.reorder_child (this.event_box, 3);
+        }
     }
 
     public override bool supports_settings() {
