@@ -20,6 +20,7 @@ glib-2.0
 libpeas-1.0 >= 1.8.0
 libwnck-3.0 >= 3.14.0
 vala
+xprop
 ```
 
 ### Installing
