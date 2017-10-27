@@ -21,6 +21,7 @@ public class Applet : Budgie.Applet
     Gtk.Button close_button;
     Gtk.Image maximize_image;
     Gtk.Image restore_image;
+    Gtk.Box applet_container;
 
     bool is_buttons_visible {get; set;}
     bool is_title_visible {get; set;}
@@ -54,12 +55,12 @@ public class Applet : Budgie.Applet
         Gtk.EventBox event_box = new Gtk.EventBox();
         event_box.add(this.label);
 
-        Gtk.Box box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        box.pack_start (event_box, false, false, 0);
-        box.pack_start (this.minimize_button, false, false, 0);
-        box.pack_start (this.maximize_button, false, false, 0);
-        box.pack_start (this.close_button, false, false, 0);
-        this.add (box);
+        this.applet_container = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        this.applet_container.pack_start (this.event_box, false, false, 0);
+        this.applet_container.pack_start (this.minimize_button, false, false, 0);
+        this.applet_container.pack_start (this.maximize_button, false, false, 0);
+        this.applet_container.pack_start (this.close_button, false, false, 0);
+        this.add (this.applet_container);
 
 
         event_box.button_press_event.connect ((event) => {
