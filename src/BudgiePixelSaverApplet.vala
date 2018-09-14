@@ -43,8 +43,13 @@ public class Applet : Budgie.Applet
         this.title_bar_manager.register();
 
         this.minimize_button = new Gtk.Button.from_icon_name ("window-minimize-symbolic");
+        this.minimize_button.relief = Gtk.ReliefStyle.NONE;
+
         this.maximize_button = new Gtk.Button.from_icon_name ("window-maximize-symbolic");
+        this.maximize_button.relief = Gtk.ReliefStyle.NONE;
+
         this.close_button = new Gtk.Button.from_icon_name ("window-close-symbolic", Gtk.IconSize.BUTTON);
+        this.close_button.relief = Gtk.ReliefStyle.NONE;
 
         this.maximize_image = new Gtk.Image.from_icon_name ("window-maximize-symbolic", Gtk.IconSize.BUTTON);
         this.restore_image = new Gtk.Image.from_icon_name ("window-restore-symbolic", Gtk.IconSize.BUTTON);
@@ -64,7 +69,6 @@ public class Applet : Budgie.Applet
         this.applet_container.pack_start (this.close_button, false, false, 0);
         this.add (this.applet_container);
 
-        this.set_css_styles();
 
         event_box.button_press_event.connect ((event) => {
             if (event.type == Gdk.EventType.@2BUTTON_PRESS){
@@ -138,19 +142,6 @@ public class Applet : Budgie.Applet
 
     ~Applet(){
         this.title_bar_manager.unregister();
-    }
-
-    private void set_css_styles(){
-        this.applet_container.get_style_context().add_class("titlebar");
-
-        this.minimize_button.get_style_context().add_class("titlebutton");
-        this.minimize_button.get_style_context().add_class("minimize");
-
-        this.maximize_button.get_style_context().add_class("titlebutton");
-        this.maximize_button.get_style_context().add_class("maximize");
-
-        this.close_button.get_style_context().add_class("titlebutton");
-        this.close_button.get_style_context().add_class("close");
     }
 
     void on_settings_change(string key) {
