@@ -43,8 +43,13 @@ public class Applet : Budgie.Applet
         this.title_bar_manager.register();
 
         this.minimize_button = new Gtk.Button.from_icon_name ("window-minimize-symbolic");
+        this.minimize_button.relief = Gtk.ReliefStyle.NONE;
+
         this.maximize_button = new Gtk.Button.from_icon_name ("window-maximize-symbolic");
+        this.maximize_button.relief = Gtk.ReliefStyle.NONE;
+
         this.close_button = new Gtk.Button.from_icon_name ("window-close-symbolic", Gtk.IconSize.BUTTON);
+        this.close_button.relief = Gtk.ReliefStyle.NONE;
 
         this.maximize_image = new Gtk.Image.from_icon_name ("window-maximize-symbolic", Gtk.IconSize.BUTTON);
         this.restore_image = new Gtk.Image.from_icon_name ("window-restore-symbolic", Gtk.IconSize.BUTTON);
